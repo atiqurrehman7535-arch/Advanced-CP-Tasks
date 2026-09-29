@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 3 React Tasks - Advanced CP</title>
+  <!-- React and ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Babel for on-the-fly JSX transpilation in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0f172a;
+      color: #334155;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+    .nav-container {
+      max-width: 850px;
+      margin: 0 auto 24px auto;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    .app-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // --- TASK 1 COMPONENTS ---
+    const ProductCard = ({ title, price, category }) => {
+      return (
+        <div style={{
+          flex: '1 1 300px',
+          maxWidth: '380px',
+          backgroundColor: '#ffffff',
+          border: '1px solid #e2e8f0',
+          borderRadius: '14px',
+          padding: '24px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}>
+          <span style={{
+            alignSelf: 'flex-start',
+            backgroundColor: '#eff6ff',
+            color: '#2563eb',
+            fontSize: '12px',
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            padding: '4px 12px',
+            borderRadius: '9999px',
+            marginBottom: '14px',
+            border: '1px solid #bfdbfe'
+          }}>
+            {category}
+          </span>
+          <h3 style={{
+            fontSize: '19px',
+            fontWeight: '600',
+            color: '#1e293b',
+            margin: '0 0 20px 0',
+            lineHeight: '1.4'
+          }}>
+            {title}
+          </h3>
+          <div style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px',
+            marginTop: 'auto',
+            paddingTop: '16px',
+            borderTop: '1px solid #f1f5f9'
+          }}>
+            <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>Price:</span>
+            <span style={{ fontSize: '24px', fontWeight: '700', color: '#059669' }}>
+              ${typeof price === 'number' ? price.toFixed(2) : price}
+            </span>
+          </div>
+        </div>
+      );
+    };
+
+    const Task1 = () => {
+      const product1 = {
+        title: "Sony WH-1000XM5 Wireless Headphones",
+        price: 399.99,
+        category: "Electronics",
+      };
+
+      const product2 = {
+        title: "Ergonomic Lumbar Office Desk Chair",
+        price: 249.5,
+        category: "Furniture",
+      };
+
+      return (
+        <div style={{
+          backgroundColor: '#f8fafc',
+          borderRadius: '16px',
+          padding: '32px 24px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' }}>
+              Task 1: Reusable Component with Props
+            </h1>
+            <p style={{ fontSize: '15px', color: '#64748b' }}>
+              Reusing the <code>ProductCard</code> component with two unique sets of product data.
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center' }}>
+            <ProductCard
+              title={product1.title}
+              price={product1.price}
+              category={product1.category}
+            />
+            <ProductCard
+              title={product2.title}
+              price={product2.price}
+              category={product2.category}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    // --- TASK 2 COMPONENTS ---
+    const LikeButton = () => {
+      const [likes, setLikes] = useState(0);
+
+      return (
+        <div style={{
+          backgroundColor: '#ffffff',
+          border: '1px solid #e2e8f0',
+          borderRadius: '16px',
+          padding: '40px 24px',
+          textAlign: 'center',
+          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.06)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          maxWidth: '520px',
+          margin: '0 auto'
+        }}>
+          <div style={{
+            width: '68px',
+            height: '68px',
+            borderRadius: '50%',
+            backgroundColor: '#fee2e2',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '16px',
+            fontSize: '32px'
+          }}>
+            ❤️
+          </div>
+          <h2 style={{ fontSize: '22px', fontWeight: '600', color: '#1e293b', margin: '0 0 8px 0' }}>
+            Interactive Like Counter
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: '0 0 24px 0' }}>
+            Click the button below to dynamically increment the total like count.
+          </p>
+          <div style={{
+            backgroundColor: '#f1f5f9',
+            borderRadius: '14px',
+            padding: '16px 40px',
+            marginBottom: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minWidth: '160px',
+            border: '1px solid #e2e8f0'
+          }}>
+            <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', fontWeight: '700' }}>
+              Total Likes
+            </span>
+            <span style={{ fontSize: '44px', fontWeight: '800', color: '#2563eb', marginTop: '4px' }}>
+              {likes}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <button
+              onClick={() => setLikes(prev => prev + 1)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                backgroundColor: '#2563eb',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '10px',
+                padding: '12px 28px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 4px 10px rgba(37, 99, 235, 0.3)'
+              }}
+            >
+              <span style={{ marginRight: '8px' }}>👍</span> Like
+            </button>
+            {likes > 0 && (
+              <button
+                onClick={() => setLikes(0)}
+                style={{
+                  backgroundColor: '#f1f5f9',
+                  color: '#475569',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '10px',
+                  padding: '12px 20px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const Task2 = () => {
+      return (
+        <div style={{
+          backgroundColor: '#f8fafc',
+          borderRadius: '16px',
+          padding: '32px 24px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' }}>
+              Task 2: State & Event Handling (useState)
+            </h1>
+            <p style={{ fontSize: '15px', color: '#64748b' }}>
+              Demonstrating React's <code>useState</code> hook and dynamic <code>onClick</code> handling.
+            </p>
+          </div>
+          <LikeButton />
+        </div>
+      );
+    };
+
+    // --- TASK 3 COMPONENTS ---
+    const Task3 = () => {
+      const students = [
+        { id: 101, name: "Alexander Wright", score: 85 },
+        { id: 102, name: "Sophia Martinez", score: 42 },
+        { id: 103, name: "Liam Chen", score: 68 },
+        { id: 104, name: "Emma Watson", score: 49 },
+        { id: 105, name: "Noah Patel", score: 92 },
+        { id: 106, name: "Olivia Brown", score: 50 },
+        { id: 107, name: "James Wilson", score: 35 },
+      ];
+
+      return (
+        <div style={{
+          backgroundColor: '#f8fafc',
+          borderRadius: '16px',
+          padding: '32px 24px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' }}>
+              Task 3: List Rendering & Conditional Rendering
+            </h1>
+            <p style={{ fontSize: '15px', color: '#64748b' }}>
+              Dynamic rendering using <code>.map()</code> with keys, plus conditional{' '}
+              <span style={{ color: '#16a34a', fontWeight: 'bold' }}>Pass (&ge; 50)</span> and{' '}
+              <span style={{ color: '#dc2626', fontWeight: 'bold' }}>Fail (&lt; 50)</span>.
+            </p>
+          </div>
+          <div style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderRadius: '14px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.05)'
+          }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #e2e8f0' }}>
+                  <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#475569' }}>ID</th>
+                  <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#475569' }}>Student Name</th>
+                  <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#475569' }}>Score</th>
+                  <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#475569' }}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.map((student) => {
+                  const isPassing = student.score >= 50;
+                  return (
+                    <tr key={student.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '14px 20px', fontSize: '14px', color: '#64748b', fontWeight: '500' }}>#{student.id}</td>
+                      <td style={{ padding: '14px 20px', fontSize: '15px', color: '#0f172a', fontWeight: '600' }}>{student.name}</td>
+                      <td style={{ padding: '14px 20px', fontSize: '15px', color: '#334155' }}><strong>{student.score}</strong> / 100</td>
+                      <td style={{ padding: '14px 20px' }}>
+                        {isPassing ? (
+                          <span style={{
+                            display: 'inline-block',
+                            color: '#16a34a',
+                            backgroundColor: '#dcfce7',
+                            fontWeight: '700',
+                            fontSize: '13px',
+                            padding: '4px 14px',
+                            borderRadius: '9999px',
+                            border: '1px solid #86efac'
+                          }}>
+                            Pass
+                          </span>
+                        ) : (
+                          <span style={{
+                            display: 'inline-block',
+                            color: '#dc2626',
+                            backgroundColor: '#fee2e2',
+                            fontWeight: '700',
+                            fontSize: '13px',
+                            padding: '4px 14px',
+                            borderRadius: '9999px',
+                            border: '1px solid #fca5a5'
+                          }}>
+                            Fail
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
+    // --- MAIN DEMO WRAPPER ---
+    function App() {
+      const [activeTab, setActiveTab] = useState('all');
+
+      return (
+        <div className="app-wrapper">
+          <div className="nav-container">
+            <button
+              className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveTab('all')}
+            >
+              All Tasks View
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'task1' ? 'active' : ''}`}
+              onClick={() => setActiveTab('task1')}
+            >
+              Task 1 (Props)
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'task2' ? 'active' : ''}`}
+              onClick={() => setActiveTab('task2')}
+            >
+              Task 2 (useState)
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'task3' ? 'active' : ''}`}
+              onClick={() => setActiveTab('task3')}
+            >
+              Task 3 (Lists & Conditions)
+            </button>
+          </div>
+
+          <main style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {(activeTab === 'all' || activeTab === 'task1') && <Task1 />}
+            {(activeTab === 'all' || activeTab === 'task2') && <Task2 />}
+            {(activeTab === 'all' || activeTab === 'task3') && <Task3 />}
+          </main>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
